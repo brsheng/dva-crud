@@ -1,0 +1,24 @@
+.normal {
+	font-family: Georgia, sans-serif;
+	text-align: center;
+}
+
+.title {
+	font-size: 2.5rem;
+	font-weight: normal;
+	letter-spacing: -1px;
+	background: darkslateblue;
+	padding: 0.6em 0;
+	color: white;
+	margin: 0;
+}
+
+.login_layout_container {
+	background-color: #fff;
+}
+
+/* .header {
+	background: #f0f2f5;
+	box-shadow: 0 3.2px 7.2px 0 var(--callout-shadow-color, rgba(0, 0, 0, 0.132)),
+	0 0.6px 1.8px 0 var(--callout-shadow-secondary-color, rgba(0, 0, 0, 0.108));
+} */
