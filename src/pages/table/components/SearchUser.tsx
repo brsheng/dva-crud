@@ -14,8 +14,6 @@ class SearchUser extends Component<SearchUserProps<any>> {
             if (typeof onSearch === 'function') {
               onSearch(values);
             }
-            console.log(values);
-            
           }}
           onReset={() => {
             if (typeof onReset === 'function') {
