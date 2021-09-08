@@ -14,6 +14,9 @@ const UserDetail: React.FC<AddUserProps> = (props: AddUserProps) => {
     const { defaultValue } = props;
     form.setFieldsValue({
       ...defaultValue,
+      //将defaultValue展开，使用moment方法重写agentJoindate&agentProductionDate
+      agentJoinDate: moment(defaultValue?.AgentJoinDate),
+      agentProductionDate: moment(defaultValue?.AgentProductionDate),
     });
   }, [props.defaultValue]);
 
@@ -69,10 +72,10 @@ const UserDetail: React.FC<AddUserProps> = (props: AddUserProps) => {
             </Form.Item>
           </Col>
         </Row>
-        {/*         <Row>
+                <Row>
           <Col span={12}>
             <Form.Item label="AgentJoinDate" name="agentJoinDate" rules={[]}>
-              <DatePicker showTime />
+              <DatePicker showTime disabled />
             </Form.Item>
           </Col>
 
@@ -82,10 +85,10 @@ const UserDetail: React.FC<AddUserProps> = (props: AddUserProps) => {
               name="agentProductionDate"
               rules={[]}
             >
-              <DatePicker showTime />
+              <DatePicker showTime disabled />
             </Form.Item>
           </Col>
-        </Row> */}
+        </Row>
         <Row>
           <Col span={12}>
             <Form.Item label="WorkStatus" name="workStatus" rules={[]}>
