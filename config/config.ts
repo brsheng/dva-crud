@@ -3,6 +3,7 @@ import { defineConfig } from 'umi';
 import Routes from './routes';
 
 export default defineConfig({
+	mfsu: {},
 	hash: true,
 	antd: {},
 	dva: {
