@@ -6,7 +6,7 @@ import { StateType } from './model';
 import Box from '@/components/ComponentContainer';
 import SearchUser from './components/SearchUser';
 import AddUser from './components/AddUser';
-import UserDetail from './components/details';
+import UserDetail from './components/UserDetails';
 
 import { ColumnsType } from 'antd/es/table';
 import { Button, Popconfirm, Table, Pagination } from 'antd';
@@ -39,7 +39,7 @@ class UserPage extends React.Component<UserPageProps, UserPageState> {
   }
   componentDidMount = () => {
     this.props.dispatch({
-      type: 'tableTry/fetch',
+      type: 'users/fetch',
       payload: {
         currenetPageIndex: this.props.CurrentPage,
         isAdministrator: true,
@@ -61,7 +61,7 @@ class UserPage extends React.Component<UserPageProps, UserPageState> {
                 onDetails: true,
               });
               this.props.dispatch({
-                type: 'tableTry/searchEmployee',
+                type: 'users/searchEmployee',
                 payload: WsAlias,
               });
             }
@@ -137,18 +137,17 @@ class UserPage extends React.Component<UserPageProps, UserPageState> {
 
   handleDelete = (alias: any) => {
     this.props.dispatch({
-      type: 'tableTry/deleteUser',
+      type: 'users/deleteUser',
       payload: alias,
     });
-    // this.props.dispatch({
-    //   type: 'tableTry/fetch',
-    //   payload: {
-    //     wsAlias: this.props.wsAlias,
-    //     currenetPageIndex: this.props.CurrentPage,
-    //     isAdministrator: true,
-    //     pageSize: this.props.ItemsPerPage,
-    //   },
-    // });
+    this.props.dispatch({
+      type:'users/fetch',
+      payload:{
+        currenetPageIndex: this.props.CurrentPage,
+        pageSize: this.props.ItemsPerPage,
+        isAdministrator: true,
+      }
+    })
   };
 
   handleEdit = (alias: any): void => {
@@ -156,7 +155,7 @@ class UserPage extends React.Component<UserPageProps, UserPageState> {
       onEdit: true,
     });
     this.props.dispatch({
-      type: 'tableTry/searchEmployee',
+      type: 'users/searchEmployee',
       payload: alias,
     });
   };
@@ -164,12 +163,12 @@ class UserPage extends React.Component<UserPageProps, UserPageState> {
   onSubmit = (user: User) => {
     if (!user.MSAlias) {
       this.props.dispatch({
-        type: 'tableTry/update',
+        type: 'users/update',
         payload: user,
       });
     } else {
       this.props.dispatch({
-        type: 'tableTry/removeAndInsert',
+        type: 'users/removeAndInsert',
       });
     }
     this.setState({ onEdit: false });
@@ -181,7 +180,7 @@ class UserPage extends React.Component<UserPageProps, UserPageState> {
 
   paginationHandler = (page: number, pageSize?: number) => {
     this.props.dispatch({
-      type: 'tableTry/fetch',
+      type: 'users/fetch',
       payload: {
         currenetPageIndex: page,
         pageSize: pageSize ? pageSize : this.props.ItemsPerPage,
@@ -192,7 +191,14 @@ class UserPage extends React.Component<UserPageProps, UserPageState> {
 
   render() {
     const { onEdit, onDetails } = this.state;
-    const { item, currentItem } = this.props;
+    const {
+      item,
+      currentItem,
+      TotalItems,
+      CurrentPage,
+      ItemsPerPage,
+      dispatch,
+    } = this.props;
 
     return (
       <>
@@ -200,15 +206,15 @@ class UserPage extends React.Component<UserPageProps, UserPageState> {
           <SearchUser
             onReset={() => {}}
             onSearch={(values) => {
-              this.props.dispatch({
-                type: 'tableTry/fetch',
+              dispatch({
+                type: 'users/fetch',
                 payload: {
                   englishName: values.englishName,
                   wsAlias: values.wsAlias,
                   msAlias: values.msAlias,
-                  currenetPageIndex: this.props.CurrentPage,
+                  currenetPageIndex: CurrentPage,
                   isAdministrator: true,
-                  pageSize: this.props.ItemsPerPage,
+                  pageSize: ItemsPerPage,
                 },
               });
             }}
@@ -219,7 +225,7 @@ class UserPage extends React.Component<UserPageProps, UserPageState> {
             type="primary"
             onClick={() => {
               this.props.dispatch({
-                type: 'tableTry/removeAndInsert',
+                type: 'users/removeAndInsert',
                 payload: {},
               });
               this.setState({ onEdit: true });
@@ -236,16 +242,16 @@ class UserPage extends React.Component<UserPageProps, UserPageState> {
             sticky={true}
             pagination={false}
             rowKey={(record) => {
-              return record.AID + Date.now(); //在这里加上一个时间戳就可以了
+              return record.AID + Date.now();
             }}
           />
           <Pagination
             style={{ textAlign: 'right' }}
-            total={this.props.TotalItems}
+            total={TotalItems}
             onChange={this.paginationHandler}
             // onShowSizeChange={this.pageSizeHandler}
-            current={this.props.CurrentPage}
-            pageSize={this.props.ItemsPerPage}
+            current={CurrentPage}
+            pageSize={ItemsPerPage}
             showSizeChanger
             showQuickJumper
             showTotal={(total) => `Total ${total} items`}
@@ -267,13 +273,13 @@ class UserPage extends React.Component<UserPageProps, UserPageState> {
   }
 }
 
-export default connect(({ tableTry }: { tableTry: StateType }) => ({
-  item: tableTry.item,
-  TotalItems: tableTry.TotalItems,
-  ItemsPerPage: tableTry.ItemsPerPage,
-  currenetPageIndex: tableTry.currenetPageIndex,
-  pageSize: tableTry.pageSize,
-  isAdministrator: tableTry.isAdministrator,
-  CurrentPage: tableTry.CurrentPage,
-  currentItem: tableTry.currentItem,
+export default connect(({ users }: { users: StateType }) => ({
+  item: users.item,
+  TotalItems: users.TotalItems,
+  ItemsPerPage: users.ItemsPerPage,
+  currenetPageIndex: users.currenetPageIndex,
+  pageSize: users.pageSize,
+  isAdministrator: users.isAdministrator,
+  CurrentPage: users.CurrentPage,
+  currentItem: users.currentItem,
 }))(UserPage);

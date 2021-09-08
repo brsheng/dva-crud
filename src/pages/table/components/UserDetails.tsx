@@ -17,12 +17,6 @@ const UserDetail: React.FC<AddUserProps> = (props: AddUserProps) => {
     });
   }, [props.defaultValue]);
 
-  const mapToUserModel = (values: any): User => {
-    return {
-      ...values,
-    };
-  };
-
   return (
     <Modal
       forceRender

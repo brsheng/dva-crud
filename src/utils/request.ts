@@ -44,14 +44,14 @@ const request = extend({
 	// errorHandler,
 	// 'credentials' 发送带凭据的请求
 	// 为了让浏览器发送包含凭据的请求（即使是跨域源），需要设置 credentials: 'include'
-  // 如果只想在请求URL与调用脚本位于同一起源处时发送凭据，请添加credentials: 'same-origin'
-  // 要改为确保浏览器不在请求中包含凭据，请使用credentials: 'omit'
+	// 如果只想在请求URL与调用脚本位于同一起源处时发送凭据，请添加credentials: 'same-origin'
+	// 要改为确保浏览器不在请求中包含凭据，请使用credentials: 'omit'
 	credentials: 'include',
 	// mode: 'no-cors',
 	mode: 'cors',
 	// 'responseType': 如何解析返回的数据，当 parseResponse 值为 false 时该参数无效
-  // 默认为 'json', 对返回结果进行 Response.text().then( d => JSON.parse(d) ) 解析
-  // 其他(text, blob, arrayBuffer, formData), 做 Response[responseType]() 解析
+	// 默认为 'json', 对返回结果进行 Response.text().then( d => JSON.parse(d) ) 解析
+	// 其他(text, blob, arrayBuffer, formData), 做 Response[responseType]() 解析
 	requestType: 'json'
 });
 

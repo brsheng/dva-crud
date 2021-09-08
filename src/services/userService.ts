@@ -5,7 +5,7 @@ export async function GetEmployeesByCondition(payload: User): Promise<Result<Pag
   return await service.GetEmployeesByCondition(`${environment.GetEmployeesByConditionUrl}`, payload);
 }
 
-export async function searchEmployee(alias: any): Promise<Result<PageData<User>>> {
+export async function searchEmployee(alias: string): Promise<Result<PageData<User>>> {
   return await service.searchEmployee(`${environment.GetByAliasUrl}?alias=${alias}`);
 }
 

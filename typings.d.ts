@@ -10,22 +10,16 @@ declare module '*.jpeg';
 declare module '*.gif';
 declare module '*.bmp';
 declare module '*.tiff';
-declare module 'umi';
 declare module 'omit.js';
-declare module 'numeral';
-declare module '@antv/data-set';
-declare module 'mockjs';
-declare module 'react-fittext';
-declare module 'bizcharts-plugin-slider';
 interface Result<T> {
-	isSuccess: boolean;
-	message?: string;
-	data: T;
-	errorCode: number;
+  isSuccess: boolean;
+  message?: string;
+  data: T;
+  errorCode: number;
 }
 
 interface PageData<T> {
-	item: T[];
+  item: T[];
 }
 
 interface User {
@@ -44,13 +38,13 @@ interface User {
   AgentProductionDate: string;
   MSAlias: string;
   IsAdministrator: Boolean;
-  
+
 }
 
 
 
-interface SearchUserProps <T> {
-	onSearch: (payload: T) => void;
-	onReset: () => void;
+interface SearchUserProps<T> {
+  onSearch: (payload: T) => void;
+  onReset: () => void;
 }
 

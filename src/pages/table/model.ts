@@ -1,6 +1,6 @@
 import { Reducer } from 'umi'
-import { BasicEffect } from './../../models/common'
 import { message } from 'antd';
+import { BasicEffect } from './../../models/common'
 
 import {
   GetEmployeesByCondition,
@@ -8,7 +8,7 @@ import {
   removeAndInsert,
   deleteUser,
   update
-} from '@/services/tableService'
+} from '@/services/userService'
 
 export interface StateType {
   item: User[],
@@ -19,9 +19,9 @@ export interface StateType {
   TotalItems: number;
   ItemsPerPage: number;
   CurrentPage: number;
-  englishName: string;
-  wsAlias: string;
-  msAlias: string
+  englishName?: string;
+  wsAlias?: string;
+  msAlias?: string
 }
 
 export interface ModelType {
@@ -34,13 +34,13 @@ export interface ModelType {
 }
 
 const Model: ModelType = {
-  namespace: 'tableTry',
+  namespace: 'users',
   state: {
     item: [],
     pageSize: 20,
     currenetPageIndex: 0,
     isAdministrator: true,
-    TotalItems: 149,
+    TotalItems: 0,
     CurrentPage: 0,
     ItemsPerPage: 20,
     englishName: '',
@@ -51,10 +51,10 @@ const Model: ModelType = {
   effects: {
     *fetch({ payload }, { call, put }) {
       const response = yield call(GetEmployeesByCondition, payload);
-      const { Result: { Items } } = response
+      const { Result: { Items, TotalItems, CurrentPage } } = response
       yield put({
         type: 'save',
-        payload: { item: Items },
+        payload: { item: Items, TotalItems: TotalItems, CurrentPage: CurrentPage },
       });
 
 
@@ -79,12 +79,7 @@ const Model: ModelType = {
       if (response.Success) {
         message.success('Delete successfully.');
         yield put({
-          type: 'fetch',
-          payload: {
-            currenetPageIndex: 0,
-            isAdministrator: true,
-            pageSize: 20,
-          }
+          type: 'save'
         })
       } else {
         message.error('Delete failed')

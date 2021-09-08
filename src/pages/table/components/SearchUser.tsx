@@ -45,7 +45,9 @@ class SearchUser extends Component<SearchUserProps<any>> {
               style={{ marginRight: 15 }}
               placeholder="Reset"
               size="large"
-              icon={<CleanIcon style={{ width: 16, height: 16, fill: '#4259c1' }} />}
+              icon={
+                <CleanIcon style={{ width: 16, height: 16, fill: '#4259c1' }} />
+              }
             />
             <Button
               type="primary"
