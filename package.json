@@ -21,7 +21,6 @@
   },
   "dependencies": {
     "@svgr/webpack": "^5.5.0",
-    "@ant-design/pro-layout": "^6.5.0",
     "react": "17.x",
     "react-dev-inspector": "^1.6.0",
     "react-dom": "17.x",

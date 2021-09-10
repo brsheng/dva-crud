@@ -32,7 +32,8 @@ const UserDetail: React.FC<AddUserProps> = (props: AddUserProps) => {
         props.onCancel();
       }}
     >
-      <Form labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} form={form}>
+      <Form labelCol={{ span: 6 }} wrapperCol={{ span: 14 }} form={form}>
+        {/* <Form  form={form}> */}
         <Row>
           <Col span={12}>
             <Form.Item label="EmployeeID" name="employeeID" rules={[]}>
@@ -72,7 +73,7 @@ const UserDetail: React.FC<AddUserProps> = (props: AddUserProps) => {
             </Form.Item>
           </Col>
         </Row>
-                <Row>
+        <Row>
           <Col span={12}>
             <Form.Item label="AgentJoinDate" name="agentJoinDate" rules={[]}>
               <DatePicker showTime disabled />

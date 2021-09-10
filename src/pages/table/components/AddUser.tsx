@@ -11,14 +11,19 @@ interface AddUserProps {
 
 const AddUser: React.FC<AddUserProps> = (props: AddUserProps) => {
   const [form] = Form.useForm();
+
   useEffect(() => {
     const { defaultValue } = props;
-    form.setFieldsValue({
-      ...defaultValue,
-      //将defaultValue展开，使用moment方法重写agentJoindate&agentProductionDate
-      agentJoinDate: moment(defaultValue?.AgentJoinDate),
-      agentProductionDate: moment(defaultValue?.AgentProductionDate),
-    });
+    if (defaultValue === undefined) {
+      form.resetFields();
+    } else {
+      form.setFieldsValue({
+        ...defaultValue,
+        //将defaultValue展开，使用moment方法重写agentJoindate&agentProductionDate
+        agentJoinDate: moment(defaultValue?.AgentJoinDate),
+        agentProductionDate: moment(defaultValue?.AgentProductionDate),
+      });
+    }
   }, [props.defaultValue]);
 
   const mapToUserModel = (values: any): User => {
@@ -42,8 +47,8 @@ const AddUser: React.FC<AddUserProps> = (props: AddUserProps) => {
       }}
     >
       <Form
-        labelCol={{ span: 4 }}
-        wrapperCol={{ span: 20 }}
+        labelCol={{ span: 6 }}
+        wrapperCol={{ span: 14 }}
         onFinish={(values: any) => {
           props.onSubmit(mapToUserModel(values));
         }}

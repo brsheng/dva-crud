@@ -1,27 +1,29 @@
-import { Reducer } from 'umi'
+import { Reducer } from 'umi';
 import { message } from 'antd';
-import { BasicEffect } from './../../models/common'
+import { BasicEffect } from './../../models/common';
 
 import {
   GetEmployeesByCondition,
   searchEmployee,
   removeAndInsert,
   deleteUser,
-  update
-} from '@/services/userService'
+  update,
+} from '@/services/userService';
 
 export interface StateType {
-  item: User[],
-  currentItem?: User,
-  pageSize: number,
-  currenetPageIndex: number,
-  isAdministrator: boolean,
+  item: User[];
+  currentItem?: User;
+  // pageSize: number,
+  currenetPageIndex: number;
+  isAdministrator: boolean;
   TotalItems: number;
   ItemsPerPage: number;
   CurrentPage: number;
+  userRoles: string;
+  userDatas: string;
   englishName?: string;
   wsAlias?: string;
-  msAlias?: string
+  msAlias?: string;
 }
 
 export interface ModelType {
@@ -37,41 +39,50 @@ const Model: ModelType = {
   namespace: 'users',
   state: {
     item: [],
-    pageSize: 20,
+    // pageSize: 20,
     currenetPageIndex: 0,
     isAdministrator: true,
     TotalItems: 0,
-    CurrentPage: 0,
+    CurrentPage: 1,
     ItemsPerPage: 20,
+    userRoles: '',
+    userDatas: '',
     englishName: '',
     wsAlias: '',
-    msAlias: ''
-
+    msAlias: '',
   },
   effects: {
     *fetch({ payload }, { call, put }) {
       const response = yield call(GetEmployeesByCondition, payload);
-      const { Result: { Items, TotalItems, CurrentPage } } = response
+      const {
+        Result: { Items, TotalItems, CurrentPage },
+      } = response;
       yield put({
         type: 'save',
-        payload: { item: Items, TotalItems: TotalItems, CurrentPage: CurrentPage },
+        payload: { item: Items, TotalItems, CurrentPage },
       });
-
-
     },
     *searchEmployee({ payload }, { call, put }) {
       const response = yield call(searchEmployee, payload);
       yield put({
         type: 'save',
-        payload: { currentItem: response }
-      })
+        payload: { currentItem: response },
+      });
     },
-    *removeAndInsert({ payload }, { call, put }) {
+    *removeAndInsert({ payload }, { call, put, select }) {
       const response = yield call(removeAndInsert, payload);
+      const { userRoles, userDatas, wsAlias } = yield select(
+        (state: any) => state.user,
+      );
       if (response.Success) {
         yield put({
-          type: 'fetch'
-        })
+          type: 'save',
+          payload: {
+            userRoles,
+            userDatas,
+            wsAlias,
+          },
+        });
       }
     },
     *deleteUser({ payload }, { call, put }) {
@@ -79,10 +90,15 @@ const Model: ModelType = {
       if (response.Success) {
         message.success('Delete successfully.');
         yield put({
-          type: 'save'
-        })
+          type: 'fetch',
+          payload: {
+            currenetPageIndex: 0,
+            pageSize: 20,
+            isAdministrator: true,
+          },
+        });
       } else {
-        message.error('Delete failed')
+        message.error('Delete failed');
       }
     },
     *update({ payload }, { call, put }) {
@@ -92,19 +108,18 @@ const Model: ModelType = {
           type: 'fetch',
           payload: {
             currenetPageIndex: 0,
-            isAdministrator: true,
             pageSize: 20,
-          }
-        })
+            isAdministrator: true,
+          },
+        });
       }
-    }
+    },
   },
   reducers: {
     save(state, { payload }) {
       return { ...state, ...payload };
     },
-  }
-}
+  },
+};
 
-export default Model
-
+export default Model;

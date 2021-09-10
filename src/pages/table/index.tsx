@@ -24,6 +24,8 @@ interface UserPageProps extends ConnectProps {
   TotalItems: number;
   ItemsPerPage: number;
   CurrentPage: number;
+  userRoles: string;
+  userDatas: string;
   englishName: string;
   wsAlias: string;
   msAlias: string;
@@ -140,14 +142,6 @@ class UserPage extends React.Component<UserPageProps, UserPageState> {
       type: 'users/deleteUser',
       payload: alias,
     });
-    this.props.dispatch({
-      type:'users/fetch',
-      payload:{
-        currenetPageIndex: this.props.CurrentPage,
-        pageSize: this.props.ItemsPerPage,
-        isAdministrator: true,
-      }
-    })
   };
 
   handleEdit = (alias: any): void => {
@@ -189,6 +183,16 @@ class UserPage extends React.Component<UserPageProps, UserPageState> {
     });
   };
 
+  pageSizeHandler = (current: number, size: number) => {
+    this.props.dispatch({
+      type: 'users/fetch',
+      payload: {
+        currenetPageIndex: current,
+        pageSize: size,
+      },
+    });
+  };
+
   render() {
     const { onEdit, onDetails } = this.state;
     const {
@@ -224,11 +228,15 @@ class UserPage extends React.Component<UserPageProps, UserPageState> {
           <Button
             type="primary"
             onClick={() => {
+              this.setState({ onEdit: true });
               this.props.dispatch({
                 type: 'users/removeAndInsert',
-                payload: {},
+                payload: {
+                  wsAlias: this.props.wsAlias,
+                  userRoles: this.props.userRoles,
+                  userDatas: this.props.userDatas,
+                },
               });
-              this.setState({ onEdit: true });
             }}
             style={{ marginRight: 15 }}
           >
@@ -249,8 +257,8 @@ class UserPage extends React.Component<UserPageProps, UserPageState> {
             style={{ textAlign: 'right' }}
             total={TotalItems}
             onChange={this.paginationHandler}
-            // onShowSizeChange={this.pageSizeHandler}
-            current={CurrentPage}
+            onShowSizeChange={this.pageSizeHandler}
+            // current={CurrentPage}
             pageSize={ItemsPerPage}
             showSizeChanger
             showQuickJumper
@@ -278,7 +286,7 @@ export default connect(({ users }: { users: StateType }) => ({
   TotalItems: users.TotalItems,
   ItemsPerPage: users.ItemsPerPage,
   currenetPageIndex: users.currenetPageIndex,
-  pageSize: users.pageSize,
+  // pageSize: users.pageSize,
   isAdministrator: users.isAdministrator,
   CurrentPage: users.CurrentPage,
   currentItem: users.currentItem,
