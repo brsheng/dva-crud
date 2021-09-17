@@ -11,6 +11,8 @@ import UserDetail from './components/UserDetails';
 import { ColumnsType } from 'antd/es/table';
 import { Button, Popconfirm, Table, Pagination } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+
+import { deleteUser, update, removeAndInsert } from '@/services/userService';
 interface UserPageState {
   onEdit: boolean;
   onDetails: boolean;
@@ -39,16 +41,6 @@ class UserPage extends React.Component<UserPageProps, UserPageState> {
       onDetails: false,
     };
   }
-  componentDidMount = () => {
-    this.props.dispatch({
-      type: 'users/fetch',
-      payload: {
-        currenetPageIndex: this.props.CurrentPage,
-        isAdministrator: true,
-        pageSize: this.props.ItemsPerPage,
-      },
-    });
-  };
 
   columns: ColumnsType<User> = [
     {
@@ -137,10 +129,14 @@ class UserPage extends React.Component<UserPageProps, UserPageState> {
     },
   ];
 
-  handleDelete = (alias: any) => {
+  componentDidMount = () => {
     this.props.dispatch({
-      type: 'users/deleteUser',
-      payload: alias,
+      type: 'users/fetch',
+      payload: {
+        currenetPageIndex: this.props.CurrentPage,
+        isAdministrator: true,
+        pageSize: this.props.ItemsPerPage,
+      },
     });
   };
 
@@ -154,17 +150,31 @@ class UserPage extends React.Component<UserPageProps, UserPageState> {
     });
   };
 
+  handleDelete = (alias: any): void => {
+    deleteUser(alias).then(() => {
+      this.props.dispatch({
+        type: 'users/fetch',
+        payload: {
+          currenetPageIndex: this.props.CurrentPage,
+          isAdministrator: true,
+          pageSize: this.props.ItemsPerPage,
+        },
+      });
+    });
+  };
+
   onSubmit = (user: User) => {
-    if (!user.MSAlias) {
+    const service = !user.MSAlias ? update : removeAndInsert;
+    service(user).then(() => {
       this.props.dispatch({
-        type: 'users/update',
-        payload: user,
+        type: 'users/fetch',
+        payload: {
+          currenetPageIndex: this.props.CurrentPage,
+          isAdministrator: true,
+          pageSize: this.props.ItemsPerPage,
+        },
       });
-    } else {
-      this.props.dispatch({
-        type: 'users/removeAndInsert',
-      });
-    }
+    });
     this.setState({ onEdit: false });
   };
 
@@ -258,7 +268,7 @@ class UserPage extends React.Component<UserPageProps, UserPageState> {
             total={TotalItems}
             onChange={this.paginationHandler}
             onShowSizeChange={this.pageSizeHandler}
-            // current={CurrentPage}
+            current={CurrentPage}
             pageSize={ItemsPerPage}
             showSizeChanger
             showQuickJumper
@@ -286,7 +296,6 @@ export default connect(({ users }: { users: StateType }) => ({
   TotalItems: users.TotalItems,
   ItemsPerPage: users.ItemsPerPage,
   currenetPageIndex: users.currenetPageIndex,
-  // pageSize: users.pageSize,
   isAdministrator: users.isAdministrator,
   CurrentPage: users.CurrentPage,
   currentItem: users.currentItem,

@@ -13,7 +13,6 @@ import {
 export interface StateType {
   item: User[];
   currentItem?: User;
-  // pageSize: number,
   currenetPageIndex: number;
   isAdministrator: boolean;
   TotalItems: number;
@@ -39,7 +38,6 @@ const Model: ModelType = {
   namespace: 'users',
   state: {
     item: [],
-    // pageSize: 20,
     currenetPageIndex: 0,
     isAdministrator: true,
     TotalItems: 0,
@@ -90,12 +88,7 @@ const Model: ModelType = {
       if (response.Success) {
         message.success('Delete successfully.');
         yield put({
-          type: 'fetch',
-          payload: {
-            currenetPageIndex: 0,
-            pageSize: 20,
-            isAdministrator: true,
-          },
+          type: 'save',
         });
       } else {
         message.error('Delete failed');
@@ -105,12 +98,7 @@ const Model: ModelType = {
       const response = yield call(update, payload);
       if (response) {
         yield put({
-          type: 'fetch',
-          payload: {
-            currenetPageIndex: 0,
-            pageSize: 20,
-            isAdministrator: true,
-          },
+          type: 'save',
         });
       }
     },
