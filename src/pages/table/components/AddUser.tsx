@@ -1,5 +1,14 @@
 import React, { useEffect } from 'react';
-import { Modal, Input, Form, Row, Col, DatePicker, Select } from 'antd';
+import {
+  Modal,
+  Input,
+  Form,
+  Row,
+  Col,
+  DatePicker,
+  Select,
+  TreeSelect,
+} from 'antd';
 import moment from 'moment';
 
 interface AddUserProps {
@@ -8,6 +17,9 @@ interface AddUserProps {
   onCancel: () => void;
   defaultValue: User | undefined;
 }
+
+const { Option } = Select;
+const { TreeNode } = TreeSelect;
 
 const AddUser: React.FC<AddUserProps> = (props: AddUserProps) => {
   const [form] = Form.useForm();
@@ -96,7 +108,7 @@ const AddUser: React.FC<AddUserProps> = (props: AddUserProps) => {
         <Row>
           <Col span={12}>
             <Form.Item label="AgentJoinDate" name="agentJoinDate" rules={[]}>
-              <DatePicker showTime />
+              <DatePicker />
             </Form.Item>
           </Col>
 
@@ -106,27 +118,48 @@ const AddUser: React.FC<AddUserProps> = (props: AddUserProps) => {
               name="agentProductionDate"
               rules={[]}
             >
-              <DatePicker showTime />
+              <DatePicker />
             </Form.Item>
           </Col>
         </Row>
         <Row>
           <Col span={12}>
             <Form.Item label="WorkStatus" name="workStatus" rules={[]}>
-              <Select />
+              <Select mode="tags">
+                <Option value="1">one</Option>
+                <Option value="2">two</Option>
+                <Option value="3">three</Option>
+              </Select>
             </Form.Item>
           </Col>
 
           <Col span={12}>
             <Form.Item label="Segment" name="segment" rules={[]}>
-              <Select />
+              <Select>
+                <Option value="1">one</Option>
+                <Option value="2">two</Option>
+                <Option value="3">three</Option>
+              </Select>
             </Form.Item>
           </Col>
         </Row>
         <Row>
           <Col span={12}>
             <Form.Item label="Modality" name="modality" rules={[]}>
-              <Select />
+              <TreeSelect>
+                <TreeNode value="parent 1" title="parent 1">
+                  <TreeNode value="parent 1-0" title="parent 1-0">
+                    <TreeNode value="leaf1" title="leaf1" />
+                    <TreeNode value="leaf2" title="leaf2" />
+                  </TreeNode>
+                  <TreeNode value="parent 1-1" title="parent 1-1">
+                    <TreeNode
+                      value="leaf3"
+                      title={<b style={{ color: '#08c' }}>leaf3</b>}
+                    />
+                  </TreeNode>
+                </TreeNode>
+              </TreeSelect>
             </Form.Item>
           </Col>
 
