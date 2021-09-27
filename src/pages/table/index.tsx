@@ -16,6 +16,8 @@ import { deleteUser, update, removeAndInsert } from '@/services/userService';
 interface UserPageState {
   onEdit: boolean;
   onDetails: boolean;
+  currenetPageIndex: number;
+  pageSize: number;
 }
 
 interface UserPageProps extends ConnectProps {
@@ -39,6 +41,8 @@ class UserPage extends React.Component<UserPageProps, UserPageState> {
     this.state = {
       onEdit: false,
       onDetails: false,
+      currenetPageIndex: 0,
+      pageSize: 20,
     };
   }
 
@@ -133,9 +137,9 @@ class UserPage extends React.Component<UserPageProps, UserPageState> {
     this.props.dispatch({
       type: 'users/fetch',
       payload: {
-        currenetPageIndex: this.props.CurrentPage,
+        currenetPageIndex: 0,
         isAdministrator: true,
-        pageSize: this.props.ItemsPerPage,
+        pageSize: 20,
       },
     });
   };
@@ -155,9 +159,9 @@ class UserPage extends React.Component<UserPageProps, UserPageState> {
       this.props.dispatch({
         type: 'users/fetch',
         payload: {
-          currenetPageIndex: this.props.CurrentPage,
+          currenetPageIndex: 0,
           isAdministrator: true,
-          pageSize: this.props.ItemsPerPage,
+          pageSize: 20,
         },
       });
     });
@@ -169,9 +173,9 @@ class UserPage extends React.Component<UserPageProps, UserPageState> {
       this.props.dispatch({
         type: 'users/fetch',
         payload: {
-          currenetPageIndex: this.props.CurrentPage,
+          currenetPageIndex: 0,
           isAdministrator: true,
-          pageSize: this.props.ItemsPerPage,
+          pageSize: 20,
         },
       });
     });
@@ -226,9 +230,9 @@ class UserPage extends React.Component<UserPageProps, UserPageState> {
                   englishName: values.englishName,
                   wsAlias: values.wsAlias,
                   msAlias: values.msAlias,
-                  currenetPageIndex: CurrentPage,
+                  currenetPageIndex: 0,
                   isAdministrator: true,
-                  pageSize: ItemsPerPage,
+                  pageSize: 20,
                 },
               });
             }}
